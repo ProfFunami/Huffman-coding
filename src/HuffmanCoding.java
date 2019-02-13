@@ -7,49 +7,47 @@ public class HuffmanCoding {
 
     public static void main(String[] args) throws FileNotFoundException {
         ArrayList<Node> tree = new ArrayList<Node>();
+        String alphabet;
+        double probability;
 
         File inputFile = new File("dict_probability-of-occurrence.txt");
-        Scanner inFile = new Scanner(inputFile);
-        inFile.useDelimiter("[^A-za-z0-9 ']+");
+        Scanner File = new Scanner(inputFile);
 
-        while (inFile.hasNextLine()) {
-            String nextLine = inFile.nextLine();
-            Scanner SandPScanner = new Scanner(nextLine);
-            SandPScanner.useDelimiter(" ");
-            String c = SandPScanner.next();
-            String pString = SandPScanner.next();
-            double p = Double.parseDouble(pString);
-            Node hn = new Node(c, p, null, null);
-            tree.add(hn);
-            SandPScanner.close();
+        while (File.hasNextLine()) {
+            String Line = File.nextLine();
+            Scanner scanner = new Scanner(Line);
+            alphabet = scanner.next();
+            probability = Double.parseDouble(scanner.next());
+            Node node = new Node(alphabet, probability, null, null);
+            tree.add(node);
+            scanner.close();
         }
-        inFile.close();
+        File.close();
 
-        while (tree.size() > 1) {
-            Collections.sort(tree, Node.HuffPComparator);
-            Node hn1 = tree.get(0);
-            tree.remove(hn1);
-            Node hn2 = tree.get(0);
-            tree.remove(hn2);
-            Node node = new Node("blank", hn1.probability + hn2.probability, hn1, hn2);
+        while (tree.size() != 1) {
+            Collections.sort(tree, new Node.compProb());
+            Node small1 = tree.get(0);
+            Node small2 = tree.get(1);
+            tree.remove(small1);
+            tree.remove(small2);
+            Node node = new Node("NODE", small1.probability + small2.probability, small1, small2);
             tree.add(node);
         }
 
-        encode(tree.get(0));
+        coding(tree.get(0));
         displayTree(tree.get(0));
-        for (Node hn : hnodes)
+        for (Node hn : hnodes) {
             System.out.println(hn.symbol + ": " + hn.code);
-        System.out.println();
+        }
         System.out.println("平均符号語長: " + acwl);
-
     }
 
-    private static void encode(Node root) {
+    private static void coding(Node root) {
         if (root.left != null && root.right != null) {
             root.left.code += (root.code + "0");
             root.right.code += (root.code + "1");
-            encode(root.left);
-            encode(root.right);
+            coding(root.left);
+            coding(root.right);
         }
     }
 
@@ -62,6 +60,6 @@ public class HuffmanCoding {
             }
             displayTree(root.right);
         }
-        Collections.sort(hnodes, Node.HuffSymComparator);
+        Collections.sort(hnodes, new Node.compSym());
     }
 }

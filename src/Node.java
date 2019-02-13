@@ -1,4 +1,4 @@
-import java.util.Comparator;
+import java.util.*;
 
 public class Node {
     String symbol;
@@ -8,28 +8,28 @@ public class Node {
     Node right;
 
     Node(String s, double p, Node lt, Node rt) {
-        symbol = s;
-        probability = p;
-        left = lt;
-        right = rt;
-        code = "";
+        this.symbol = s;        //アルファベット
+        this.probability = p;   //出現確率
+        this.left = lt;         //左の木
+        this.right = rt;        //右の木
+        this.code = "";         //符号
     }
 
-    public static Comparator<Node> HuffSymComparator = new Comparator<Node>() {
-        public int compare(Node h1, Node h2) {
-            String HuffSym1 = h1.symbol;
-            String HuffSym2 = h2.symbol;
-
-            return HuffSym1.compareTo(HuffSym2);
+    public static class compProb implements Comparator<Node> {
+        @Override
+        public int compare(Node n1, Node n2) {
+            if (n1.probability == n2.probability) {
+                return 0;
+            } else {
+                return n1.probability - n2.probability > 0 ? 1 : -1;
+            }
         }
-    };
+    }
 
-    public static Comparator<Node> HuffPComparator = new Comparator<Node>() {
-        public int compare(Node h1, Node h2) {
-            double p1 = h1.probability;
-            double p2 = h2.probability;
-
-            return (int) (10000 * p1 - 10000 * p2);
+    public static class compSym implements Comparator<Node> {
+        @Override
+        public int compare(Node n1, Node n2) {
+            return n1.symbol.compareTo(n2.symbol);
         }
-    };
+    }
 }
