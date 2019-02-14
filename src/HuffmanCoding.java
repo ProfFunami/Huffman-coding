@@ -23,27 +23,37 @@ public class HuffmanCoding {
             scanner.close();
         }
         File.close();
-
+        int count = 26;
         while (tree.size() != 1) {
             Collections.sort(tree, new Node.compProb());
+            if (count == 26) {
+                count = print(tree, count);
+            }
             Node small1 = tree.get(0);
             Node small2 = tree.get(1);
             tree.remove(small1);
             tree.remove(small2);
             Node node = new Node("NODE", small1.probability + small2.probability, small1, small2);
             tree.add(node);
-            for (Node n : tree) {
-                System.out.println(n.symbol + ": " + n.probability);    //末端以外も表示
-            }
-            System.out.println("-------------------");
+            count = print(tree, count);
         }
 
         coding(tree.get(0));
         displayTree(tree.get(0));
+        System.out.println("符号(結果)：");
         for (Node hn : hnodes) {
             System.out.println(hn.symbol + ": " + hn.code);
         }
         System.out.println("平均符号語長: " + acwl);
+    }
+
+    private static int print(ArrayList<Node> tree, int count) {
+        System.out.println("【" + count + "層目】");
+        for (Node n : tree) {
+            System.out.println(n.symbol + ": " + n.probability);    //末端以外も表示
+        }
+        System.out.println();
+        return --count;
     }
 
     private static void coding(Node root) {
