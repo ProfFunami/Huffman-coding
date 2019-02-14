@@ -32,6 +32,10 @@ public class HuffmanCoding {
             tree.remove(small2);
             Node node = new Node("NODE", small1.probability + small2.probability, small1, small2);
             tree.add(node);
+            for (Node n : tree) {
+                System.out.println(n.symbol + ": " + n.probability);    //末端以外も表示
+            }
+            System.out.println("-------------------");
         }
 
         coding(tree.get(0));
